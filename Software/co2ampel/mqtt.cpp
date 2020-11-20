@@ -14,19 +14,18 @@ PubSubClient mqttClient(wifiClient);
 long lastMQTTReconnectAttempt = 0;
 
 uint8_t failedCounter;
-uint8_t mqttFirstConnect=0;
+uint8_t mqttFirstConnect = 0;
 
-String mqttUsername="";
-String mqttOrg="";
+String mqttUsername = "";
+String mqttOrg = "";
 
-void setupMQTT(ConfigManager &configManager) 
-{
+void setupMQTT(ConfigManager &configManager) {
   mqttUsername = configManager.getCharValue("mqtt_username", "");
   wifiClient.setFingerprint(configManager.getCharValue("ssl_fingerprint", SSL_FINGERPRINT));
   mqttClient.setBufferSize(1100);
-  mqttClient.setServer(configManager.getCharValue("mqtt_host", MQTT_HOST),configManager.getUintValue("mqtt_port", MQTT_PORT));
+  mqttClient.setServer(configManager.getCharValue("mqtt_host", MQTT_HOST), configManager.getUintValue("mqtt_port", MQTT_PORT));
   mqttClient.setCallback(mqttCallback);
-  
+
 }
 
 
@@ -34,15 +33,14 @@ bool reconnectMQTT(ConfigManager &configManager) {
   Serial.print("mqtt connect with username: ");
   Serial.println(mqttUsername);
   mqttClient.connect(mqttUsername.c_str(), mqttUsername.c_str(), configManager.getCharValue("mqtt_password", "\0"));
-  if (mqttClient.connected() && mqttUsername!="") {
-    String topic = String("config/")+mqttUsername+String("/#");
+  if (mqttClient.connected() && mqttUsername != "") {
+    String topic = String("config/") + mqttUsername + String("/#");
     mqttClient.subscribe(topic.c_str());
   }
   return mqttClient.connected();
 }
 
-void loopMQTT(ConfigManager &configManager)
-{
+void loopMQTT(ConfigManager &configManager) {
   if (!mqttClient.connected()) {
     if (millis() - lastMQTTReconnectAttempt > 5000) {
       lastMQTTReconnectAttempt = millis();
@@ -50,10 +48,10 @@ void loopMQTT(ConfigManager &configManager)
         if (reconnectMQTT(configManager)) {
           Serial.println("mqtt connected");
           lastMQTTReconnectAttempt = 0;
-          failedCounter=0;
-          if(!mqttFirstConnect) {
-            mqttFirstConnect=1;
-            ledBlink(WHITE,DARK,2000);
+          failedCounter = 0;
+          if (!mqttFirstConnect) {
+            mqttFirstConnect = 1;
+            ledBlink(WHITE, DARK, 2000);
           }
         } else {
           Serial.println("mqtt connect failed");
@@ -72,7 +70,7 @@ void publishValues(ConfigManager &configManager, uint16_t co2, double hum, doubl
     Serial.print("MQTT not connected, cant publish!");
     return;
   }
-  if (mqttOrg=="") {
+  if (mqttOrg == "") {
     Serial.print("MQTT org unknown, cant publish!");
     return;
   }
@@ -87,10 +85,10 @@ void publishValues(ConfigManager &configManager, uint16_t co2, double hum, doubl
   data["color"] = int(color);
   data["rssi"] = RssI;
   data["runtime"] = runtime;
-  data["version"] = String(VERSION)+"."+String(configManager.getCharValue("version", "0"));
+  data["version"] = String(VERSION) + "." + String(configManager.getCharValue("version", "0"));
   char buffer[512];
   serializeJson(root, buffer);
-  String topic = "sensors/"+mqttOrg+"/"+mqttUsername;
+  String topic = "sensors/" + mqttOrg + "/" + mqttUsername;
   if (!mqttClient.publish(topic.c_str(), buffer))  {
     Serial.print("Sensor value publish Failed!");
     failedCounter++;
@@ -98,7 +96,7 @@ void publishValues(ConfigManager &configManager, uint16_t co2, double hum, doubl
     Serial.print("Sensor value publish OK! ");
   }
   Serial.println(buffer);
-  if(failedCounter > 100) {
+  if (failedCounter > 100) {
     while (1) // freeze
       ;
   }
@@ -113,30 +111,30 @@ void mqttCallback(char* topic, byte* payload, unsigned int length) {
   Serial.print(topic);
   Serial.print(". Message: ");
   Serial.println(messageTemp);
-  if (String(topic) == "config/"+mqttUsername+"/org") {
-    mqttOrg=messageTemp;
-  } else if (String(topic) == "config/"+mqttUsername+"/calibrate") {
+  if (String(topic) == "config/" + mqttUsername + "/org") {
+    mqttOrg = messageTemp;
+  } else if (String(topic) == "config/" + mqttUsername + "/calibrate") {
     uint16_t concentration = messageTemp.toInt();
     Serial.println(concentration);
-    if(concentration >= 400 && concentration <= 2000 && millis() > SCD30_CALIBRATION_MIN_RUNTIME*1000) {
+    if (concentration >= 400 && concentration <= 2000 && millis() > SCD30_CALIBRATION_MIN_RUNTIME * 1000) {
       scd30ForceRecalibration(concentration);
     }
-  } else if (String(topic) == "config/"+mqttUsername+"/json") {
+  } else if (String(topic) == "config/" + mqttUsername + "/json") {
     setConfig(messageTemp);
-  } else if (String(topic) == "config/"+mqttUsername+"/resetwifi") {
-    if(messageTemp.toInt()) {
+  } else if (String(topic) == "config/" + mqttUsername + "/resetwifi") {
+    if (messageTemp.toInt()) {
       WiFi.disconnect(true); // disconnect and delete credentials in flash
-      while (1); // freeze and reboot due to watchdog 
+      while (1); // freeze and reboot due to watchdog
     }
-  } else if (String(topic) == "config/"+mqttUsername+"/ota") {
+  } else if (String(topic) == "config/" + mqttUsername + "/ota") {
     updateFirmware(messageTemp.c_str());
   }
 }
 
 void updateFirmware(const char* url) {
   Serial.println("Start Firmware Update");
-  t_httpUpdate_return ret = ESPhttpUpdate.update( wifiClient, url );
-  switch(ret) {
+  t_httpUpdate_return ret = ESPhttpUpdate.update(wifiClient, url);
+  switch (ret) {
     case HTTP_UPDATE_FAILED:
       Serial.printf("HTTP_UPDATE_FAILD Error (%d): %s", ESPhttpUpdate.getLastError(), ESPhttpUpdate.getLastErrorString().c_str());
       break;
@@ -148,5 +146,5 @@ void updateFirmware(const char* url) {
     case HTTP_UPDATE_OK:
       Serial.println("HTTP_UPDATE_OK");
       break;
-    }
+  }
 }

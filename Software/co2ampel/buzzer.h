@@ -12,7 +12,7 @@
 #include "ConfigManager.h"
 #include "config.h"
 
-void beep(ConfigManager &configManager, int count, bool ignoreSwitch=false);
+void beep(ConfigManager &configManager, int count, bool ignoreSwitch = false);
 void beepOK(ConfigManager &configManager);
 void beepFailure(ConfigManager &configManager);
 

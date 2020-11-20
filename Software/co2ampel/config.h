@@ -54,40 +54,40 @@ enum Color {GREEN, YELLOW, RED, BLUE, DARK, WHITE, GREEN2, YELLOW2, RED2};
 
 /************************* ESP8266 PCB V2*********************************/
 /* esp8266 D1 mini PINOUT
- *  A0 ununsed
- *  D0 GPIO16 Switch 
- *  D1 GPIO5  I2C SCL
- *  D2 GPIO4  I2C SDA
- *  D3 GPIO0  LED_DATA 2 (sad face)
- *  D4 GPIO2 unused
- *  D5 GPIO14 Buzzer
- *  D6 GPIO12 LED_DATA 1 (happy face)
- *  D7 GPIO13 SCD30 Ready
- *  D8 GPIO15 unused
- *  TX GPIO1 unused
- *  RX GPIO3 unused
- */
+    A0 ununsed
+    D0 GPIO16 Switch
+    D1 GPIO5  I2C SCL
+    D2 GPIO4  I2C SDA
+    D3 GPIO0  LED_DATA 2 (sad face)
+    D4 GPIO2 unused
+    D5 GPIO14 Buzzer
+    D6 GPIO12 LED_DATA 1 (happy face)
+    D7 GPIO13 SCD30 Ready
+    D8 GPIO15 unused
+    TX GPIO1 unused
+    RX GPIO3 unused
+*/
 
 #ifdef PCBV2
-// LEDS
-#define NUMPIXELS1 14
-#define NUMPIXELS2 14
-#define GPIO_LED1 12
-#define GPIO_LED2 0
-#define LED_BRIGHTNES 128 // % (0=dark, 255=full) overriden by led_brightness from config.json
-//SCD30
-#define GPIO_SCD30_RDY 13
-#define SCD30_TEMP_OFFSET 7.0
-// Switch
-#define GPIO_SWITCH 16
-// BUZZER
-#define GPIO_BUZZER 14
-#define BUZZER_ENABLED 1 //overriden by buzzer_enabled from config.json
-// BME280
-#define BMP_ENABLED 1
-// self test
-#define SELFTEST_ENABLED 1 //overriden by selftest_enabled from config.json 
-#define SELFTEST_BUZZER 0 //overriden by selftest_buzzer from config.json 
+  // LEDS
+  #define NUMPIXELS1 14
+  #define NUMPIXELS2 14
+  #define GPIO_LED1 12
+  #define GPIO_LED2 0
+  #define LED_BRIGHTNES 128 // % (0=dark, 255=full) overriden by led_brightness from config.json
+  //SCD30
+  #define GPIO_SCD30_RDY 13
+  #define SCD30_TEMP_OFFSET 7.0
+  // Switch
+  #define GPIO_SWITCH 16
+  // BUZZER
+  #define GPIO_BUZZER 14
+  #define BUZZER_ENABLED 1 //overriden by buzzer_enabled from config.json
+  // BME280
+  #define BMP_ENABLED 1
+  // self test
+  #define SELFTEST_ENABLED 1 //overriden by selftest_enabled from config.json
+  #define SELFTEST_BUZZER 0 //overriden by selftest_buzzer from config.json
 
 #endif
 
@@ -95,36 +95,36 @@ enum Color {GREEN, YELLOW, RED, BLUE, DARK, WHITE, GREEN2, YELLOW2, RED2};
 
 /************************* ESP8266 PCB V1*********************************/
 /* esp8266 D1 mini PINOUT
- *  A0 unused
- *  D0 GPIO16  
- *  D1 GPIO5  I2C SCL
- *  D2 GPIO4  I2C SDA
- *  D3 GPIO0  
- *  D4 GPIO2  BUZZER
- *  D5 GPIO14 LED RED
- *  D6 GPIO12 LED YELLOW
- *  D7 GPIO13 LED GREEN
- *  D8 GPIO15 SCD30 Ready
- *  TX GPIO1  unused
- *  RX GPIO3  unused
- */
+    A0 unused
+    D0 GPIO16
+    D1 GPIO5  I2C SCL
+    D2 GPIO4  I2C SDA
+    D3 GPIO0
+    D4 GPIO2  BUZZER
+    D5 GPIO14 LED RED
+    D6 GPIO12 LED YELLOW
+    D7 GPIO13 LED GREEN
+    D8 GPIO15 SCD30 Ready
+    TX GPIO1  unused
+    RX GPIO3  unused
+*/
 #ifdef PCBV1
-// LEDS
-#define GPIO_GREEN 13
-#define GPIO_YELLOW 12
-#define GPIO_RED 14
-#define LED_BRIGHTNES 255
-//SCD30
-#define GPIO_SCD30_RDY 15
-#define SCD30_TEMP_OFFSET 3.0
-// BUZZER
-#define GPIO_BUZZER 2
-#define BUZZER_ENABLED 1 //overriden by buzzer_enabled from config.json
-// BME280
-#define BMP_ENABLED 0
-// self test
-#define SELFTEST_ENABLED 1 //overriden by selftest_enabled from config.json
-#define SELFTEST_BUZZER 1 //overriden by selftest_buzzer from config.json 
+  // LEDS
+  #define GPIO_GREEN 13
+  #define GPIO_YELLOW 12
+  #define GPIO_RED 14
+  #define LED_BRIGHTNES 255
+  //SCD30
+  #define GPIO_SCD30_RDY 15
+  #define SCD30_TEMP_OFFSET 3.0
+  // BUZZER
+  #define GPIO_BUZZER 2
+  #define BUZZER_ENABLED 1 //overriden by buzzer_enabled from config.json
+  // BME280
+  #define BMP_ENABLED 0
+  // self test
+  #define SELFTEST_ENABLED 1 //overriden by selftest_enabled from config.json
+  #define SELFTEST_BUZZER 1 //overriden by selftest_buzzer from config.json
 #endif
 
 #endif
